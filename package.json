@@ -2,8 +2,9 @@
   "name": "skooh",
   "version": "0.0.1",
   "description": "skooh is a git hooks manager",
-  "bin": {
-    "prepare": "./prepare.js"
+  "bin": "./skooh.js",
+  "scripts": {
+    "ppp": "npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
