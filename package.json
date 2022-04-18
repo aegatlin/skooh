@@ -1,0 +1,29 @@
+{
+  "name": "skooh",
+  "version": "0.0.1",
+  "description": "skooh is a git hooks manager",
+  "bin": {
+    "prepare": "./prepare.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aegatlin/skooh.git"
+  },
+  "keywords": [
+    "git",
+    "hooks",
+    "manager",
+    "hook",
+    "package.json",
+    "package",
+    "simple",
+    "minimal",
+    "easy"
+  ],
+  "author": "Austin Gatlin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aegatlin/skooh/issues"
+  },
+  "homepage": "https://github.com/aegatlin/skooh#readme"
+}
