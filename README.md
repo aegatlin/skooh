@@ -30,6 +30,10 @@ npm run test
 
 ```
 
+## Migrating from Husky
+
+Husky changes the hook path in git via the `core.hookspath` setting. You can see your current settings by running `git config -l`. You will need to unset this config by running `git config --unset core.hookspath` in order reset the git hooks path back to `.git/hooks`.
+
 ## Skooh vs Husky
 
 To begin with [husky](https://github.com/typicode/husky) is a great git hooks management library with years of battle-tested use. If you need something reliable, choose husky. I've used husky and would recommend it.
