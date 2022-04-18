@@ -3,11 +3,9 @@
 function writeHooks(hooks) {
   for (const [hookName, hookString] of Object.entries(hooks)) {
     if (validHooks.includes(hookName)) {
-      fs.writeFileSync(
-        `./.git/hooks/${hookName}`,
-        `#!/bin/sh\n\n${hookString}\n`,
-        { mode: 766 }
-      );
+      const file = `./.git/hooks/${hookName}`;
+      fs.rmSync(file);
+      fs.writeFileSync(file, `#!/bin/sh\n\n${hookString}\n`, { mode: 0o755 });
     } else {
       console.error(`skooh: skipping invalid hook name: ${hookName}`);
     }
