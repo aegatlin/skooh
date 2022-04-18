@@ -1,14 +1,5 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-
-const args = process.argv.slice(2);
-
-if (args.length == 1 && args[0] == "prepare") {
-  const hooks = getHooks("./package.json");
-  writeHooks(hooks);
-}
-
 function writeHooks(hooks) {
   for (const [hookName, hookString] of Object.entries(hooks)) {
     if (validHooks.includes(hookName)) {
@@ -17,7 +8,7 @@ function writeHooks(hooks) {
         `#!/bin/sh\n\n${hookString}\n`
       );
     } else {
-      console.error(`skooh: invalid hook name: ${hookName}`);
+      console.error(`skooh: skipping invalid hook name: ${hookName}`);
     }
   }
 }
@@ -58,3 +49,11 @@ const validHooks = [
   "p4-pre-submit",
   "post-index-change",
 ];
+
+const fs = require("fs");
+const args = process.argv.slice(2);
+
+if (args.length == 1 && args[0] == "prepare") {
+  const hooks = getHooks("./package.json");
+  writeHooks(hooks);
+}
