@@ -1,6 +1,6 @@
 {
   "name": "skooh",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "skooh is a git hooks manager",
   "bin": "./skooh.js",
   "scripts": {
