@@ -5,7 +5,7 @@
 npm i -D skooh
 ```
 
-```json
+```jsonc
 // package.json
 {
   "scripts": {
