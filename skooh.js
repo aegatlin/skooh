@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
+
 const args = process.argv.slice(2);
 
-if (args == ["prepare"]) {
-  const fs = require("fs");
+if (args.length == 1 && args[0] == "prepare") {
   prepare();
 }
 
