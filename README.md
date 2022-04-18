@@ -17,7 +17,7 @@ npm i -D skooh
 }
 ```
 
-All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported. The `prepare` life-cycle hook does not run on manual changes to the `"hooks"` block. In such scenarios you can manually run `npm prepare` or `npx skooh prepare`, etc.
+All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported. The `prepare` life-cycle hook does not run on manual changes to the `"hooks"` block. In such scenarios you can manually run `npm run prepare` or `npx skooh prepare`, etc.
 
 ## How it works
 

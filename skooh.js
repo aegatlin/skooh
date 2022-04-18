@@ -4,7 +4,7 @@ function writeHooks(hooks) {
   for (const [hookName, hookString] of Object.entries(hooks)) {
     if (validHooks.includes(hookName)) {
       const file = `./.git/hooks/${hookName}`;
-      fs.rmSync(file);
+      fs.rmSync(file, { force: true });
       fs.writeFileSync(file, `#!/bin/sh\n\n${hookString}\n`, { mode: 0o755 });
     } else {
       console.error(`skooh: skipping invalid hook name: ${hookName}`);
