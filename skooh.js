@@ -5,7 +5,8 @@ function writeHooks(hooks) {
     if (validHooks.includes(hookName)) {
       fs.writeFileSync(
         `./.git/hooks/${hookName}`,
-        `#!/bin/sh\n\n${hookString}\n`
+        `#!/bin/sh\n\n${hookString}\n`,
+        { mode: 766 }
       );
     } else {
       console.error(`skooh: skipping invalid hook name: ${hookName}`);
