@@ -4,7 +4,7 @@
   "description": "skooh is a git hooks manager",
   "bin": "./skooh.js",
   "scripts": {
-    "ppp": "npm version patch && npm publish"
+    "ppp": "npm version patch && npm publish && git push"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/aegatlin/skooh/issues"
   },
-  "homepage": "https://github.com/aegatlin/skooh#readme"
+  "homepage": "https://github.com/aegatlin/skooh"
 }
