@@ -17,7 +17,7 @@ npm i -D skooh
 }
 ```
 
-All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported.
+All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported. The `prepare` life-cycle hook does not run on manual changes to the `"hooks"` block. In such scenarios you can manually run `npm prepare` or `npx skooh prepare`, etc.
 
 ## How it works
 
@@ -34,4 +34,4 @@ npm run test
 
 To begin with [husky](https://github.com/typicode/husky) is a great git hooks management library with years of battle-tested use. If you need something reliable, choose husky. I've used husky and would recommend it.
 
-The argument in favor of `skooh` is that it is simple with a minimal footprint. As with most other git hook management tools, `skooh` lets you version control your hooks and use them across your team. I wrote `skooh` over using `husky` because I didn't want a `.husky` directory. Nor did I want to manage shell scripts, which felt like too much power for the simpler use cases I use (and try to use) git hooks for. I advocate for simple hooks, mostly just combinations of other package.json scripts. Also, I didn't want to remember the husky cli commands. It is a good CLI but no CLI is better. That is, if you don't count `skooh prepare`, a design I am copying from husky. Lastly, I did not find an alternative solution.
+The argument in favor of `skooh` is that it is simple with a minimal footprint. As with most other git hook management tools, `skooh` lets you version control your hooks and use them across your team. I wrote `skooh` over using `husky` because I didn't want a `.husky` directory, nor did I want to manage shell scripts, which felt like too much power for the simpler use cases I use (and try to use) git hooks for. I advocate for simple hooks, mostly just combinations of other package.json scripts. Also, I didn't want to remember the husky cli commands. It is a good CLI but no CLI is better. That is, if you don't count `skooh prepare`, a design I am copying from husky. Lastly, I did not find an alternative solution.
