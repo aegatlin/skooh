@@ -17,7 +17,9 @@ function writeHooks(hooks) {
 function getHooks(packageJson) {
   const jsonFile = fs.readFileSync(packageJson);
   const json = JSON.parse(jsonFile);
-  return json.hooks;
+  if (json.hooks) return json.hooks;
+  console.error('skooh: no "hooks" block found in package.json');
+  process.exit();
 }
 
 const validHooks = [
