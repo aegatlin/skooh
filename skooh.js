@@ -32,7 +32,7 @@ function removeAllHooks() {
 
 function augmentPostCheckout(hooks) {
   if (hooks["post-checkout"]) {
-    fs.appendFileSync(getHookPath('post-checkout'), "\nnpx skooh\n")
+    fs.appendFileSync(getHookPath("post-checkout"), "\nnpx skooh\n");
   } else {
     writeHook("post-checkout", "npx skooh");
   }
@@ -80,4 +80,4 @@ const VALID_HOOKS = [
 removeAllHooks();
 const hooks = getHooks("./package.json");
 writeHooks(hooks);
-augmentPostCheckout(hooks)
+augmentPostCheckout(hooks);

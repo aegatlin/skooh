@@ -9,7 +9,7 @@ npm i -D skooh
 // package.json
 {
   "scripts": {
-    "prepare": "skooh prepare"
+    "prepare": "skooh"
   },
   "hooks": {
     "pre-commit": "npm run test"
@@ -17,18 +17,35 @@ npm i -D skooh
 }
 ```
 
-All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported. The `prepare` life-cycle hook does not run on manual changes to the `"hooks"` block. In such scenarios you can manually run `npm run prepare` or `npx skooh prepare`, etc.
+All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported.
+
+When manually editing the hooks block, run `npx skooh`. (The `prepare` [life-cycle hook][1] will not trigger in such scenarios.)
+
+[1][https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts]
 
 ## How it works
 
-`prepare` is a [npm life-cycle script](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts) that runs on `npm install` (and at a few other times as well). `skooh prepare` scans your `package.json` for a top-level `"hooks"` block and overwrites the related `.git/hooks/[hook-name]` file. For example, the above setup would result in `.git/hooks/pre-commit` with the following:
+`prepare` is a [npm life-cycle script][1] that runs on `npm install` (and at a few other times as well). `prepare` calls `skooh` which works as follows:
 
-```sh
-#!bin/sh
+1. It removes previously defined git hooks in preparation for updates.
+1. It scans your `package.json` for a top-level `"hooks"` block.
+1. It writes all valid hooks to `.git/hooks/`. For example, the above setup would result in `.git/hooks/pre-commit` with the following:
 
-npm run test
+   ```sh
+   #!bin/sh
 
-```
+   npm run test
+
+   ```
+
+1. It writes (or appends) `npx skooh` to the [post-checkout](https://git-scm.com/docs/githooks#_post_checkout) hook, which runs `skooh` on rebase, pull, etc. This allows hooks in different branches, or hooks from changesets, to update automatically. For example, with no `post-checkout` hook defined, as in the above setup, the resulting `.git/hooks/post-checkout` is as follows:
+
+   ```sh
+   #!bin/sh
+
+   npx skooh
+
+   ```
 
 ## Migrating from Husky
 
