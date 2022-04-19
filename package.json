@@ -9,8 +9,7 @@
     "prepare": "skooh"
   },
   "hooks": {
-    "pre-commit": "echo 'pre-commit from main'",
-    "post-checkout": "echo 'post-checkout from main'"
+    "pre-commit": "echo 'pre-commit from test'"
   },
   "repository": {
     "type": "git",
