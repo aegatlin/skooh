@@ -21,7 +21,7 @@ All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported.
 
 When manually editing the hooks block, run `npx skooh`. (The `prepare` [life-cycle hook][1] will not trigger in such scenarios.)
 
-[1][https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts]
+[1]: https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts
 
 ## How it works
 
