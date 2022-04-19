@@ -1,5 +1,7 @@
 # skooh
 
+`skooh` is a git hooks management tool. It has no dependencies. It aims to have the simplest developer experience possible.
+
 ```sh
 # install as a dev dependency
 npm i -D skooh
@@ -19,7 +21,7 @@ npm i -D skooh
 
 All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported.
 
-When manually editing the hooks block, run `npx skooh`. (The `prepare` [life-cycle hook][1] will not trigger in such scenarios.)
+When manually editing the package.json hooks block, run `npx skooh`. (The `prepare` [life-cycle hook][1] does not trigger in such scenarios.)
 
 [1]: https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts
 
@@ -29,7 +31,7 @@ When manually editing the hooks block, run `npx skooh`. (The `prepare` [life-cyc
 
 1. It removes previously defined git hooks in preparation for updates.
 1. It scans your `package.json` for a top-level `"hooks"` block.
-1. It writes all valid hooks to `.git/hooks/`. For example, the above setup would result in `.git/hooks/pre-commit` with the following:
+1. It writes all valid hooks to `.git/hooks/`. For example, the above setup would result in a `.git/hooks/pre-commit` as follows:
 
    ```sh
    #!bin/sh
@@ -38,14 +40,7 @@ When manually editing the hooks block, run `npx skooh`. (The `prepare` [life-cyc
 
    ```
 
-1. It writes (or appends) `npx skooh` to the [post-checkout](https://git-scm.com/docs/githooks#_post_checkout) hook, which runs `skooh` on rebase, pull, etc. This allows hooks in different branches, or hooks from changesets, to update automatically. For example, with no `post-checkout` hook defined, as in the above setup, the resulting `.git/hooks/post-checkout` is as follows:
-
-   ```sh
-   #!bin/sh
-
-   npx skooh
-
-   ```
+1. It writes a [post-checkout](https://git-scm.com/docs/githooks#_post_checkout) hook to manage automatic updates (or appends to the one you define). This ensures that differently defined hooks from branches, changesets, etc., are automatically applied. (This might sound fancy, but it's not. It just calls `npx skooh` in the post-checkout hook.)
 
 ## Migrating from Husky
 
@@ -53,6 +48,16 @@ Husky changes the hook path in git via the `core.hookspath` setting. You can see
 
 ## Skooh vs Husky
 
-To begin with [husky](https://github.com/typicode/husky) is a great git hooks management library with years of battle-tested use. If you need something reliable, choose husky. I've used husky and would recommend it.
+What `skooh`, `husky`, and every other git hooks management solution has in common is the goal of adding git hooks to version control. This allows for a consistent distributed developer experience since you can run things like linters, formatters, and anything else you'd like, across your distributed team.
 
-The argument in favor of `skooh` is that it is simple with a minimal footprint. As with most other git hook management tools, `skooh` lets you version control your hooks and use them across your team. I wrote `skooh` over using `husky` because I didn't want a `.husky` directory, nor did I want to manage shell scripts, which felt like too much power for the simpler use cases I use (and try to use) git hooks for. I advocate for simple hooks, mostly just combinations of other package.json scripts. Also, I didn't want to remember the husky cli commands. It is a good CLI but no CLI is better. That is, if you don't count `skooh prepare`, a design I am copying from husky. Lastly, I did not find an alternative solution.
+The argument in favor of `husky` is that it is reliable. It has been battle-tested throughout the years. It is a good library and I would recommend it if you want something reliable and simple enough.
+
+The argument in favor of `skooh` is as follows:
+
+1. The simplest developer experience possible
+   1. No top-level directory (like `.husky/`)
+   1. No shell scripts to manage, either manually, or via a cli command (like `husky add`)
+   1. No CLI at all (unless you count, `npx skooh` itself)
+1. Encourages simple hooks
+
+   I'd argue that the "ideal git hook" is a combination of other package.json scripts.
