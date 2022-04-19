@@ -1,14 +1,40 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
+
 function writeHooks(hooks) {
   for (const [hookName, hookString] of Object.entries(hooks)) {
-    if (validHooks.includes(hookName)) {
-      const file = `./.git/hooks/${hookName}`;
-      fs.rmSync(file, { force: true });
-      fs.writeFileSync(file, `#!/bin/sh\n\n${hookString}\n`, { mode: 0o755 });
+    if (VALID_HOOKS.includes(hookName)) {
+      writeHook(hookName, hookString);
     } else {
       console.error(`skooh: skipping invalid hook name: ${hookName}`);
     }
+  }
+}
+
+function writeHook(hookName, hookString) {
+  fs.writeFileSync(getHookPath(hookName), getHookScript(hookString), {
+    mode: 0o755,
+  });
+}
+
+function getHookPath(hookName) {
+  return `./.git/hooks/${hookName}`;
+}
+
+function getHookScript(hookString) {
+  return `#!/bin/sh\n\n${hookString}\n`;
+}
+
+function removeAllHooks() {
+  VALID_HOOKS.forEach((hook) => fs.rmSync(getHookPath(hook), { force: true }));
+}
+
+function augmentPostCheckout(hooks) {
+  if (hooks["post-checkout"]) {
+    fs.appendFileSync(getHookPath('post-checkout'), "\nnpx skooh\n")
+  } else {
+    writeHook("post-checkout", "npx skooh");
   }
 }
 
@@ -20,7 +46,7 @@ function getHooks(packageJson) {
   process.exit();
 }
 
-const validHooks = [
+const VALID_HOOKS = [
   "applypatch-msg",
   "pre-applypatch",
   "post-applypatch",
@@ -51,10 +77,7 @@ const validHooks = [
   "post-index-change",
 ];
 
-const fs = require("fs");
-const args = process.argv.slice(2);
-
-if (args.length == 1 && args[0] == "prepare") {
-  const hooks = getHooks("./package.json");
-  writeHooks(hooks);
-}
+removeAllHooks();
+const hooks = getHooks("./package.json");
+writeHooks(hooks);
+augmentPostCheckout(hooks)
