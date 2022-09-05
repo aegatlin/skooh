@@ -18,11 +18,7 @@ npm set-script prepare skooh
 
 All [valid git hooks](https://git-scm.com/docs/githooks#_hooks) are supported.
 
-When manually editing the package.json hooks block, run `npx skooh`. (The `prepare` [life-cycle hook][1] does not trigger in such scenarios.)
-
 [1]: https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts
-
-## Explanation
 
 ## How-To Guides
 
@@ -42,6 +38,10 @@ After installing (`npm i -D skooh`) and setting up the prepare script (`npm set-
 Then run `npx skooh`, which updates your `.git/hooks/pre-commit` file.
 
 Now, in the future, when you checkout this branch or clone this repo, `skooh`'s builtin `post-checkout` hook will run which will looks for hooks and write them to `.git/hooks/`.
+
+### How to edit your hooks block
+
+When manually editing the package.json hooks block, run `npx skooh` when you are finished. This is normally ran automatically via the `prepare` [life-cycle hook](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts). But, manual edits are **not** detected, so you have to run `npx skooh` for skooh to notice the changes.
 
 ## Reference
 
@@ -92,16 +92,22 @@ Husky changes the hook path in git via the `core.hookspath` setting. You can see
    1. You will use it so rarely that you will forget the keywords and help commands.
    1. It's purpose is to help you add simple one-liner code to your `.husky` files. If you didn't have `.husky` files, you wouldn't need the CLI.
 
-The argument in favor of `skooh` is as follows:
+In conclusions, it is my opinion that `skooh` is simpler to use than husky. Not top-level directory, no shell script management, no git config overrides, and no CLI needed.
 
-1. The simplest developer experience possible
-1. No top-level directory (like `.husky/`)
-1. No shell scripts to manage, either manually, or via a cli command (like `husky add`)
-1. No CLI at all (unless you count, `npx skooh` itself)
-1. Encourages simple hooks
+### What does a good git hook look like
 
-I'd argue that the "ideal git hook" is a combination of other package.json scripts.
+I'd argue that the "ideal git hook" is a combination of other package.json scripts. Personally, the goal I aim for in most of my projects is something like the following:
 
-```
-
+```json
+// package.json
+{
+  "scripts": {
+    "format": "...",
+    "lint": "...",
+    "test": "..."
+  },
+  "hooks": {
+    "pre-commit": "npm run format && npm run lint && npm run test"
+  }
+}
 ```
