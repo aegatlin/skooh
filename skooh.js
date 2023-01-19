@@ -77,6 +77,7 @@ const VALID_HOOKS = [
   'post-index-change',
 ]
 
+// Check if .git/ exists, since on things like Docker builds, it might not
 if (fs.existsSync('./.git')) {
   removeAllHooks()
   const hooks = getHooks('./package.json')

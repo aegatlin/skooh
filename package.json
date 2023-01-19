@@ -5,8 +5,6 @@
   "bin": "./skooh.js",
   "scripts": {
     "ppp": "npm version patch && npm publish && git push",
-    "test": "npx skooh prepare",
-    "prepare": "skooh",
     "format": "prettier --write shook.js"
   },
   "hooks": {
@@ -35,7 +33,6 @@
   },
   "homepage": "https://github.com/aegatlin/skooh",
   "devDependencies": {
-    "prettier": "^2.8.3",
-    "skooh": "^0.1.4"
+    "prettier": "^2.8.3"
   }
 }
