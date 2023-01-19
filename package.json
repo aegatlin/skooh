@@ -6,7 +6,8 @@
   "scripts": {
     "ppp": "npm version patch && npm publish && git push",
     "test": "npx skooh prepare",
-    "prepare": "skooh"
+    "prepare": "skooh",
+    "format": "prettier --write shook.js"
   },
   "hooks": {
     "pre-commit": "echo 'pre-commit from main'",
@@ -34,6 +35,7 @@
   },
   "homepage": "https://github.com/aegatlin/skooh",
   "devDependencies": {
+    "prettier": "^2.8.3",
     "skooh": "^0.1.4"
   }
 }
