@@ -11,10 +11,18 @@ export function skooh(gitPath = './.git', packageJsonPath = './package.json') {
 }
 
 export function isGoodGitPath(gitPath) {
-  try {
-    fs.accessSync(gitPath, fs.constants.W_OK)
-    return fs.existsSync(gitPath)
-  } catch {
+  const exists = fs.existsSync(gitPath)
+
+  if (exists) {
+    try {
+      fs.accessSync(gitPath, fs.constants.W_OK)
+      return true
+    } catch {
+      console.error(`skooh: skipping: git path not writable: ${gitPath}`)
+      return false
+    }
+  } else {
+    console.error(`skooh: skipping: bad git path: ${gitPath}`)
     return false
   }
 }
@@ -38,7 +46,7 @@ export function writeHooks(hooks, hooksPath) {
         mode: 0o755,
       })
     } else {
-      console.error(`skooh: skipping invalid hook name: ${hookName}`)
+      console.error(`skooh: invalid hook: ${hookName}`)
     }
   }
 }

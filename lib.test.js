@@ -51,6 +51,7 @@ describe('isGoodGitPath', () => {
 
   afterEach(() => {
     fs.rmSync(testPath, { recursive: true, force: true })
+    mock.reset()
   })
 
   it('returns true for accessible git path', () => {
@@ -61,19 +62,39 @@ describe('isGoodGitPath', () => {
   /*
   `.git/` could not get copied into some environments. E.g., Docker builds.
   */
-  it('returns false for nonexistent git path', () => {
+  it('returns false for nonexistent git path with error log', () => {
+    const errorMessages = []
+    mock.method(console, 'error', (msg) => {
+      errorMessages.push(msg)
+    })
+
     assert.equal(isGoodGitPath('./.badPath'), false)
+    assert.equal(errorMessages.length, 1)
+    assert.deepEqual(
+      errorMessages[0],
+      'skooh: skipping: bad git path: ./.badPath'
+    )
   })
 
   /*
   Sometimes the user does not have write permissions for `.git/`. E.g., Github
   Actions.
   */
-  it('returns false for non-writeable git path', () => {
-    fs.mkdirSync(`${testPath}/dirNoWrite`, { mode: 0o555 })
+  it('when git path is not writeable, returns false with error log', () => {
+    const errorMessages = []
+    mock.method(console, 'error', (msg) => {
+      errorMessages.push(msg)
+    })
+    const dirNoWritePath = `${testPath}/dirNoWrite`
+    fs.mkdirSync(dirNoWritePath, { mode: 0o555 })
 
-    const actual = isGoodGitPath('./testDirNoWrite')
+    const actual = isGoodGitPath(dirNoWritePath)
     assert.equal(actual, false)
+    assert.equal(errorMessages.length, 1)
+    assert.deepEqual(
+      errorMessages[0],
+      `skooh: skipping: git path not writable: ./test/dirNoWrite`
+    )
   })
 })
 
@@ -134,6 +155,7 @@ describe('writeHooks', () => {
 
   afterEach(() => {
     fs.rmSync(testPath, { recursive: true, force: true })
+    mock.reset()
   })
 
   it('writes hooks into hooksPath', () => {
@@ -145,19 +167,17 @@ describe('writeHooks', () => {
   })
 
   it('invalid hook names are skipped with error logs', () => {
-    const messages = []
+    const errorMessages = []
     mock.method(console, 'error', (msg) => {
-      messages.push(msg)
+      errorMessages.push(msg)
     })
 
     const hooks = { 'bad-hook-name': 'any code' }
     writeHooks(hooks, hooksPath)
 
     assert.equal(fs.existsSync(`${hooksPath}/bad-hook-name`), false)
-    assert.deepEqual(messages, [
-      'skooh: skipping invalid hook name: bad-hook-name',
-    ])
-    mock.reset()
+    assert.equal(errorMessages.length, 1)
+    assert.equal(errorMessages[0], 'skooh: invalid hook: bad-hook-name')
   })
 })
 
