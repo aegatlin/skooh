@@ -41,7 +41,7 @@ Now, in the future, when you checkout this branch or clone this repo, `skooh`'s 
 
 ### How to edit your hooks block
 
-When manually editing the package.json hooks block, run `npx skooh` when you are finished. This is normally ran automatically via the `prepare` [life-cycle hook](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts). But, manual edits are **not** detected, so you have to run `npx skooh` for skooh to notice the changes.
+Run `npx skooh` after manually editing the package.json hooks block. (This is normally ran automatically via the `prepare` [life-cycle hook](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts), but, manual edits cannot be detected.)
 
 ## Reference
 
@@ -51,7 +51,7 @@ When manually editing the package.json hooks block, run `npx skooh` when you are
 
 ## Explanation
 
-The goal of skooh is to version control your git hooks so you have a consistent way of triggering them across teams and development environments. `.git/hooks/` is not version controlled itself, but it is a straightforward, user-friendly, and git-approved way to managing git hooks. This means we _should_ use it for managing hooks. Skooh reads your `package.json` in order to prepare your git hooks.
+The goal of skooh is to version control your git hooks so you have a consistent way of triggering them across teams and development environments. `.git/hooks/` is not version controlled itself, but it is a straightforward, user-friendly, and git-approved way of managing git hooks. This means we _should_ use it for managing hooks. Skooh reads your `package.json` in order to prepare your git hooks.
 
 ### How the "prepare: skooh" script works
 
@@ -72,27 +72,27 @@ The goal of skooh is to version control your git hooks so you have a consistent 
 
 ### Migrating from Husky
 
-Husky changes the hook path in git via the `core.hookspath` setting. You can see your current settings by running `git config -l`. You will need to unset this config by running `git config --unset core.hookspath` in order reset the git hooks path back to `.git/hooks/`.
+Husky changes the hook path in git via the `core.hookspath` setting. You can see your current settings by running `git config -l`. You will need to unset this config by running `git config --unset core.hookspath` in order reset the git hooks path back to the default `.git/hooks/`.
 
 ### Skooh vs Husky
 
-1. To begin with, `husky` is reliable. It has been battle-tested throughout the years. It's a safe bet with good documentation, and the author seems nice, which makes me feel bad when I critise some of the decisions of the library below.
+1. To begin with, `husky` is reliable. It has been battle-tested throughout the years. It's a safe bet with good documentation, and the author seems friendly. So, use husky, (unless you are persuaded by what follows).
 
-1. But, `husky` edits your `core.hookspath`
+1. `husky` edits your `core.hookspath`
 
-   1. This forces you to use husky for all your git hooks, because git isn't looking in the default location anymore, which is `.git/hooks`.
+   1. This forces you to use husky for all your git hooks, because git isn't looking in the default location anymore (`.git/hooks`).
    1. If you move on from `husky` and forget to unset the `core.hookspath` overwrite, you will get unfamiliar errors and have an unpleasant debugging experience (you don't often get "missing git hook" errors, and so it will feel foreign to you).
 
 1. Husky also makes you write a top-level `.husky/` folder that contains all your hooks.
 
-   1. This is overkill for many use-cases, such as when you want to "just" run your linter on `pre-commit`. Do you really want yet another top-level folder which contains "just" a single file with a single line of code in it? I don't. I'd rather have that one-liner in my `package.json`: `"pre-commit": "npm run format"`.
+   1. This is overkill for many use-cases, such as when you want to "just" run your linter on `pre-commit`. Do you really want yet another top-level folder which contains "just" a single file with a single line of code in it? I don't. I'd rather have that one-liner in my `package.json`.
 
 1. Husky has a CLI.
    1. It is simple, but that's because it's almost unnecessary.
    1. You will use it so rarely that you will forget the keywords and help commands.
    1. It's purpose is to help you add simple one-liner code to your `.husky` files. If you didn't have `.husky` files, you wouldn't need the CLI.
 
-In conclusions, it is my opinion that `skooh` is simpler to use than husky. Not top-level directory, no shell script management, no git config overrides, and no CLI needed.
+In conclusions, it is my opinion that `skooh` is simpler to use than husky. No top-level directory, no shell script management, no git config overrides, and no CLI needed.
 
 ### What does a good git hook look like
 
